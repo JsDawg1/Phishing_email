@@ -1,0 +1,87 @@
+# Phishing Email Analysis Report
+
+## Email Summary
+
+| Field          | Value                                            |
+| -------------- | ------------------------------------------------ |
+| **Sender**     | Mr. James Jackson `<info@mutawamarine.com>`      |
+| **Reply-To**   | Mr. James Jackson `<info.mutawamarine@mail.com>` |
+| **Attachment** | SWT #09674321                                    |
+
+---
+
+## Initial Observation
+
+The email informs the recipient that the instructed transfer has been completed and specifies the transferred amount. The recipient is instructed to review the full body of the email for additional payment information.
+
+At first inspection, the originating IP address is not immediately visible within the header information. The originating server is identified only after performing a complete header analysis.
+
+---
+
+## Indicators of Suspicion
+
+### 1. Reply-To Address Mismatch
+
+The sender address is:
+
+`info@mutawamarine.com`
+
+However, replies are directed to:
+
+`info.mutawamarine@mail.com`
+
+This mismatch is suspicious because responses would be sent to a different domain than the one shown in the sender field. Attackers commonly use this technique to divert conversations to mailboxes under their control.
+
+---
+
+### 2. Sender Authentication Results
+
+| Authentication | Result                       |
+| -------------- | ---------------------------- |
+| SPF            | **Fail**                     |
+| DKIM           | *Not Present / Not Verified* |
+| DMARC          | **Unknown**                  |
+
+An SPF failure indicates that the sending server is not authorized to send email on behalf of the claimed sender domain. The absence of a valid DMARC evaluation further reduces confidence in the authenticity of the message.
+
+---
+
+### 3. Originating IP Address
+
+Following complete header analysis, the originating SMTP server was identified.
+
+**Originating IP:** `192. 119.71.157`
+
+**IP Owner:** `hostwindsdns.com`
+
+The originating IP should be compared with the legitimate infrastructure of the claimed organization to determine whether the message originated from an authorized mail server.
+
+---
+
+### 4. Payment-Themed Social Engineering
+
+The email claims that a transfer has already been completed and encourages the recipient to review the payment details in the message body. Financial-themed emails are commonly used to create urgency and encourage recipients to open attached files without verifying the legitimacy of the sender.
+
+---
+
+### 5. Attachment Analysis
+
+**Attachment Name**
+
+`SWT #09674321`
+
+Payment-related attachments are frequently used to deliver malware or deceive recipients into believing the message is a legitimate banking or financial notification. The attachment should be analyzed in an isolated environment before being opened.
+
+---
+
+## Conclusion
+
+This email exhibits multiple characteristics commonly associated with phishing campaigns:
+
+* Reply-To address differs from the sender address.
+* SPF authentication failed.
+* DMARC status is unknown.
+* The originating IP address is only revealed after detailed header analysis.
+* The email uses a financial payment theme designed to encourage immediate interaction with the attachment.
+
+These indicators significantly reduce the credibility of the message and warrant treating it as a suspicious email pending further attachment and infrastructure analysis.
